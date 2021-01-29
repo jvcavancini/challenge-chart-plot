@@ -1,5 +1,5 @@
 import React from 'react';
-import Highcharts from 'highcharts';
+import Highcharts, { find } from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
 const options = {
@@ -25,6 +25,7 @@ const options = {
     }]
 };
 
+
 class First_page extends React.Component {
 constructor() {
     super();
@@ -39,9 +40,32 @@ constructor() {
     this.setState({ textAreaValue: event.target.value })
   }
 
+
   buttonclick() {
-    console.log(this.state.textAreaValue)
-    //transformar os dados e salvar em variavel aqui
+    let foo=[]
+    let final_data=[]
+    //making json
+    this.state.textAreaValue.split('\n').forEach(data=>{
+      //transform unformatted string in formatted string
+      foo.push(((((data.replaceAll('\'','"')).replaceAll('{','{"')).replaceAll(':','":')).replaceAll(', ',', "')).replaceAll('""','"'))
+    })
+    const json_full=foo.map(JSON.parse)
+    //getting categories and filtering timestamp
+    const json_group = (json_full.find(data=>{return data.type=='start'}))?.group
+    const json_select = (json_full.find(data=>{return data.type=='start'}))?.select
+    const begin = (json_full.find(data=>{return data.type=='span'}))?.begin
+    const end = (json_full.find(data=>{return data.type=='span'}))?.end
+    const json_data = (json_full.filter(data=>{return data.type=='data' && data.timestamp>=begin && data.timestamp<=end}))
+    //rearranging data
+    json_data.forEach(data=>{
+      for(let i=0;i<json_select.lenght;++i) {
+        let temporary_data={}
+        temporary_data.data={x:data.timestamp,y:data[json_select[i]]}
+        json_group.forEach(g=>{temporary_data[g]=data[g]})
+        temporary_data.select=json_select[i]
+        final_data.push(temporary_data)
+      }
+    })
   };
 
   render() {
