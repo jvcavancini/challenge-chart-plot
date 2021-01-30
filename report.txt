@@ -1,0 +1,7 @@
+I couldn't finnish it in time. I had no experience with Java Script neither with ReactJS. I learned everything from the begining in 6 days to make the project.
+
+I had some problems with the input text. Had to format it so I could use the JS function JSON.parse. It took me more time than I expected as I didn't know anything about JS.
+
+In the end, I couldn't rearrange the data in order to print it in the chart.  Neither could I implement the server to exclude the data values after the type stop and write tests.
+
+To protect the application and deal with huge amount of data, I would save the data in a MongoDB server and implement real-time filters with the groups, the select values and the timestamp values, so the user could easily use the aplication. I would also implement an export option, so the user could export the charts to a pdf, xml or similar file.
